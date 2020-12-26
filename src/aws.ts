@@ -3,18 +3,17 @@ import { config } from './config/config';
 
 const c = config.dev;
 
-//Configure AWS
-var credentials = new AWS.SharedIniFileCredentials({profile: 'default'});
-AWS.config.credentials = credentials;
-
-console.log("NIR LOG:",credentials);
-console.log("NIR LOG:",c);
+if(c.aws_profile !=="DEPLOYED"){
+  var credentials = new AWS.SharedIniFileCredentials({profile: c.aws_profile});
+  AWS.config.credentials = credentials;
+}
 
 export const s3 = new AWS.S3({
   signatureVersion: 'v4',
   region: c.aws_region,
   params: {Bucket: c.aws_media_bucket}
 });
+
 
 
 /* getGetSignedUrl generates an aws signed url to retreive an item
